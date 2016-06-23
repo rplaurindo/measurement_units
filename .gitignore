@@ -1,0 +1,8 @@
+.bundle/
+log/*.log
+pkg/
+
+*~
+/*.rb
+/.byebug_history
+*.gem
