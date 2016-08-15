@@ -44,10 +44,10 @@ end
 
 # Examples
 
-# kg to gr
-p MeasurementUnits::IS::Decimal.to_units_after 1, 3
+# l to ml
+# p MeasurementUnits::IS::Decimal.to_units_after 1, 3
 
-# mg to g
-p MeasurementUnits::IS::Decimal.to_units_before 1200, 3
-# returns 1.2
-# Lê-se um grama e dois decigramas, ou vinte centigramas ou duzentas (concorda com a uniadde) miligramas
+# # ml to l
+# p MeasurementUnits::IS::Decimal.to_units_before 1200, 3
+# # returns 1.2
+# # Lê-se um litro e dois decilitros, ou vinte centilitros ou duzentos (concorda com a uniadde) mililitros (a milésima parte de um litro)

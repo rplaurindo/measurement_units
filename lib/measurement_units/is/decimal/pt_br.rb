@@ -13,46 +13,51 @@ module MeasurementUnits
 
         extend self
 
-        def weight_unit value, unit_type
-          case unit_type.to_sym
-            when :mass then
-              if value <= 1
-                weight_units[:gr]
-              else
-                if value < 1000
-                  pluralize weight_units[:gr]
-                elsif value === 1000 || value < 2000
-                  weight_units[:kg]
-                else
-                  pluralize weight_units[:kg]
-                end
-              end
-            when :volume then
-              if value <= 1 || value < 1000
-                "ml"
-              else
-                if value === 1000 || value < 2000
-                  weight_units[:l]
-                else
-                  pluralize weight_units[:l]
-                end
-              end
-          end
-        end
-
         def humanize_for value, unit_type
-          value = Decimal.to_units_before value, 3
+          # convert what is in database to mg or ml
+          value = Decimal.to_units_after value, 3
 
-          "#{Decimal.to_units_after value, 3} #{weight_unit value, unit_type}"
+          "#{resolve value, unit_type}"
         end
 
         private
+          def resolve value, unit_type
+            case unit_type.to_sym
+              when :volume then
+                if value < 1000
+                  "#{(value.to_f/100).formated} #{weight_units[:ml]}"
+                else
+                  if value === 1000 || value < 2000
+                    unit = weight_units[:l]
+                  else
+                    unit = pluralize weight_units[:l]
+                  end
+
+                  "#{(value.to_f/1000).formated} #{unit}"
+                end
+              when :mass then
+                if value < 2
+                  "#{value} #{weight_units[:gr]}"
+                elsif value < 1000
+                  "#{value} #{pluralize weight_units[:gr]}"
+                else
+                  if value === 1000 || value < 2000
+                    unit = weight_units[:kg]
+                  else
+                    unit = pluralize weight_units[:kg]
+                  end
+                  "#{(value.to_f/1000).formated} #{unit}"
+                end
+            end
+          end
+
           def pluralize str
             "#{str}s"
           end
 
           def weight_units
-            Decimal::Mass::PtBR.word_for_acronym.merge Decimal::Volume::PtBR.word_for_acronym
+            Decimal::Mass::PtBR.word_for_acronym.merge Decimal::Volume::PtBR
+              .word_for_acronym
           end
 
       end
@@ -61,10 +66,16 @@ module MeasurementUnits
   end
 end
 
-# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 1.100, :volume
-# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2, :volume
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 1.1, :volume
 # p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2.1, :volume
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2, :volume
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.9, :volume
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.91, :volume
 
-# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 1.100, :mass
-# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 1.1, :mass
 # p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2.1, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 2, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.9, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.0012, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.002, :mass
+# p MeasurementUnits::IS::Decimal::PtBR.humanize_for 0.0021, :mass
