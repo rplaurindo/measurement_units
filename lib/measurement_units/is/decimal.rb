@@ -15,7 +15,6 @@ module MeasurementUnits
         value = value.to_f
         divisor = MULTIPLE ** units
 
-        # value = (value / divisor).round(precision).to_f.formated
         if precision
           value = (value / divisor).round(precision).to_f.formated
         else
@@ -27,7 +26,6 @@ module MeasurementUnits
         value = value.to_f
         divisor = MULTIPLE ** units
 
-        # value = (value < tester ? (value * tester).round : value).to_f.formated
         if precision
           value = (value * divisor).round(precision).to_f.formated
         else
@@ -39,15 +37,21 @@ module MeasurementUnits
   end
 end
 
+# referencial unit: gram
+# dag: decagrama
+# dg: decigrama
 # kg     hg    dag  g dg cg  mg
 # 0.0001 0.001 0.01 1 10 100 1000
 
 # Examples
 
 # l to ml
+
 # p MeasurementUnits::IS::Decimal.to_units_after 1, 3
 
-# # ml to l
+# ml to l
+
 # p MeasurementUnits::IS::Decimal.to_units_before 1200, 3
-# # returns 1.2
-# # Lê-se um litro e dois decilitros, ou vinte centilitros ou duzentos (concorda com a uniadde) mililitros (a milésima parte de um litro)
+
+# returns 1.2
+# Lê-se um litro e dois decilitros, ou vinte centilitros ou duzentos (concorda com a uniadde) mililitros (a milésima parte de um litro)
