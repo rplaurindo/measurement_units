@@ -11,6 +11,14 @@ module MeasurementUnits
 
       MULTIPLE = 10
 
+      def unit_type unit
+        case unit.to_s.downcase
+          # qualquer coisa testar =~ ou somente ~
+          when /\b(l|ml)\b/; :volume
+          when /\b(kg|g)\b/; :mass
+        end
+      end
+
       def to_units_before value, units, precision = nil
         value = value.to_f
         divisor = MULTIPLE ** units
