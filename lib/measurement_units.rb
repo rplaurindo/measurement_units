@@ -1,3 +1,5 @@
+require 'measurement_units/version'
+
 module MeasurementUnits
 
   root_path = File.expand_path("../..", __FILE__)
